@@ -1,0 +1,26 @@
+
+┌────────────────────────────────────────────────────────────────
+│ STAGE 6 -- Sessions
+│ log: /tmp/harness-stage6/session.jsonl
+└────────────────────────────────────────────────────────────────
+
+  › run 1 finished in 2 turns; 4 entries logged
+
+         THE LOG ON DISK (one JSON object per line)
+         ─────────────────────────────────────────────────────────
+         seq=1 parent=- message   What port does app.ts use?
+         seq=2 parent=1 message   → read({"path":"app.ts"})
+         seq=3 parent=2 message   ← const PORT = 3000↵
+         seq=4 parent=3 message   The port is 3000.
+
+  › reopened the file in a fresh object: 4 messages replayed from disk.
+
+  › run 2 continued the SAME conversation across a process boundary (1 turn).
+
+  › forked at seq=1 into branch.jsonl (1 entries kept).
+
+  › the branch went a different way in 2 turns, from the same prefix.
+
+  › Both files still exist. The original run was not rewritten, and nothing was deleted -- which is the whole point: a fork is a new path through a tree, not an undo.
+
+  › This is also the answer to compaction amnesia from stage 4. The MODEL forgot the deploy key; the LOG never did. Lossless on disk, lossy in context, and you choose the projection.

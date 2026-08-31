@@ -1,0 +1,45 @@
+
+┌────────────────────────────────────────────────────────────────
+│ STAGE 2 -- Real tools
+│ workspace: /tmp/harness-stage2
+└────────────────────────────────────────────────────────────────
+
+  › registry exposes 5 tools: read, write, edit, bash, ls
+
+  › those schemas cost ~376 tokens on EVERY turn -- tool descriptions are prompt you pay rent on.
+
+━━━ TURN 1 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  → SENT   ~418 tok  ·  1 messages
+  ← GOT    stop_reason=tool_use
+          [assistant] Let me look at both files.
+          [assistant] → read({"path":"notes.md"})
+          [assistant] → read({"path":"config.json"})
+  ✓ read   ← # Notes↵↵ship the thing↵ship the thing↵
+  ✓ read   ← {"retries": 3}↵
+
+━━━ TURN 2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  → SENT   ~526 tok  ·  3 messages
+  ← GOT    stop_reason=tool_use
+          [assistant] → edit({"path":"notes.md","old":"ship the thing","new":"ship it"})
+  ✗ edit   ← ERROR string appears 2 times in notes.md; must be unique
+
+━━━ TURN 3 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  → SENT   ~599 tok  ·  5 messages
+  ← GOT    stop_reason=tool_use
+          [assistant] → edit({"path":"notes.md","old":"# Notes","new":"# Release notes"})
+  ✓ edit   ← edited notes.md
+
+━━━ TURN 4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  → SENT   ~660 tok  ·  7 messages
+  ← GOT    stop_reason=end_turn
+          [assistant] Read both files and retitled notes.md.
+
+  › finished in 4 turns, stoppedBy=end_turn
+
+  › TURN 2's single user message carried BOTH tool_results. Split them into two messages and the API still accepts it -- while the model quietly learns to stop calling tools in parallel.
+
+  › TURN 3 is the important one: the edit FAILED, the error came back as a tool_result with is_error, and the agent recovered. Throw that error instead and the run is simply over.

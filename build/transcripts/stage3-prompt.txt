@@ -1,0 +1,23 @@
+
+┌────────────────────────────────────────────────────────────────
+│ STAGE 3 -- The system prompt
+│ assembled from layers, and paid for every turn
+└────────────────────────────────────────────────────────────────
+
+  › system prompt assembled from three files found on disk, nearest last:
+         │ Always prefer British spelling.
+         │ 
+         │ This monorepo uses pnpm, never npm.
+         │ 
+         │ The API package targets Node 22.
+
+         prompt     size      turns    total sent
+         ─────────────────────────────────────────────
+         minimal     43 tok   3        1490 tok
+         heavy      255 tok   3        2126 tok
+
+  › the heavy prompt is 212 tokens bigger, but cost 636 extra tokens across 3 turns -- it is charged once per turn, not once per session.
+
+  › Scale that: at 40 turns a session and 200 sessions a day, a 1,000-token prompt addition is 8M tokens/day. That is the real price of a house-style section.
+
+  › What this does NOT show is whether the heavy prompt makes the agent better. Only an eval against real tasks answers that -- and the cost above is what it has to beat.

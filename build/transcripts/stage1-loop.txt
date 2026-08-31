@@ -1,0 +1,47 @@
+
+┌────────────────────────────────────────────────────────────────
+│ STAGE 1 -- The loop
+│ no real tools, no state, no safety. Just the cycle.
+└────────────────────────────────────────────────────────────────
+
+━━━ TURN 1 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  → SENT   ~91 tok  ·  system 15 tok  ·  1 tools  ·  1 messages
+          [user] Echo 'hello harness', then echo 'second time'.
+  ← GOT    stop_reason=tool_use
+          [assistant] Sure, echoing that now.
+          [assistant] → echo({"text":"hello harness"})
+
+  › ran echo -> "hello harness"
+
+━━━ TURN 2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  → SENT   ~156 tok  ·  system 15 tok  ·  1 tools  ·  3 messages
+          [user] Echo 'hello harness', then echo 'second time'.
+          [assistant] Sure, echoing that now.
+          [assistant] → echo({"text":"hello harness"})
+          [user] ← hello harness
+  ← GOT    stop_reason=tool_use
+          [assistant] And once more.
+          [assistant] → echo({"text":"second time"})
+
+  › ran echo -> "second time"
+
+━━━ TURN 3 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  → SENT   ~219 tok  ·  system 15 tok  ·  1 tools  ·  5 messages
+          [user] Echo 'hello harness', then echo 'second time'.
+          [assistant] Sure, echoing that now.
+          [assistant] → echo({"text":"hello harness"})
+          [user] ← hello harness
+          [assistant] And once more.
+          [assistant] → echo({"text":"second time"})
+          [user] ← second time
+  ← GOT    stop_reason=end_turn
+          [assistant] Done -- I echoed both.
+
+  › stop_reason is "end_turn" -- the loop ends here.
+
+  › the loop ran 3 turns and history is now 6 messages long.
+
+  › Look at TURN 3's SENT block: it contains every earlier message again. That re-send is not an optimisation choice -- it is the only reason the model knows what happened.

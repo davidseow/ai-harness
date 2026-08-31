@@ -1,0 +1,43 @@
+
+┌────────────────────────────────────────────────────────────────
+│ STAGE 4 -- Context management
+│ result cap 400 chars · history budget 260 tok
+└────────────────────────────────────────────────────────────────
+
+━━━ TURN 1 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  → SENT   ~414 tok  ·  1 messages
+  ✂ truncated tool result: 3979 → 390 chars
+
+━━━ TURN 2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  → SENT   ~562 tok  ·  3 messages
+
+━━━ TURN 3 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  → SENT   ~613 tok  ·  5 messages
+
+━━━ TURN 4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ⟲ COMPACTED  7 → 5 messages (284 → 145 tok)
+     summary written: "The assistant ran: read. Investigation of the server log is in progress."
+  → SENT   ~527 tok  ·  5 messages
+
+━━━ TURN 5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ⟲ COMPACTED  9 → 5 messages (333 → 144 tok)
+     summary written: "The assistant ran: read, read. Investigation of the server log is in progress."
+  → SENT   ~527 tok  ·  5 messages
+
+  › run finished in 5 turns
+
+         turn   was the deploy key still in the request?
+         ──────────────────────────────────────────────
+            1   yes
+            2   yes
+            3   yes
+            4   NO — it is gone
+            5   NO — it is gone
+
+  › The user stated the deploy key on turn 1. From turn 4 it is not in the request at all.
+
+  › Ask the agent for it now and it will not say 'I forgot' -- it has no way to know it ever knew. It will infer, or invent. THAT is compaction amnesia, and no error is raised anywhere.
+
+  › The fix is not a better summariser. It is to decide, explicitly, which facts are pinned and must survive every compaction -- and to test that they do.
