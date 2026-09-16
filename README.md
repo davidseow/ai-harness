@@ -19,6 +19,7 @@ or a network connection.
 | **20 minutes** | Lessons [01](lessons/01-model-is-not-the-agent.md), [02](lessons/02-the-loop.md), [03](lessons/03-context-is-the-only-state.md), [15](lessons/15-pi-events.md) — the spine |
 | **A room to teach** | [`teaching/`](teaching/) — slide outline, paper exercises, diagrams |
 | **A problem right now** | [`reference/pitfalls.md`](reference/pitfalls.md) and [`guardrails.md`](reference/guardrails.md) |
+| **A harness to choose** | [`reference/harness-deep-dive.md`](reference/harness-deep-dive.md) — Claude Code, Codex CLI and OpenCode, dissected against this course |
 
 New here? [`lessons/00-orientation.md`](lessons/00-orientation.md).
 
@@ -68,7 +69,7 @@ consequences.
 ```
 lessons/      21 lessons + orientation, one idea each, 3–5 min
 build/        a minimal harness in 7 stages, with its real captured transcripts
-reference/    glossary · pitfalls · guardrails · harness comparison
+reference/    glossary · pitfalls · guardrails · harness comparison · deep dive
 reading/      annotated bibliography + verbatim source excerpts (offline-usable)
 teaching/     slide outline (45-min and 20-min cuts) · paper exercises · diagrams
 COURSE.md     every lesson in one file
