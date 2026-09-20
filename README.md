@@ -14,8 +14,7 @@ or a network connection.
 
 | If you have… | Read |
 |---|---|
-| **A phone and 90 minutes** | [`course.pdf`](course.pdf) — the whole thing, offline |
-| **A browser** | [`COURSE.md`](COURSE.md) — all 21 lessons in one scroll |
+| **90 minutes** | [`lessons/`](lessons/) — all 21, in order, start to finish |
 | **20 minutes** | Lessons [01](lessons/01-model-is-not-the-agent.md), [02](lessons/02-the-loop.md), [03](lessons/03-context-is-the-only-state.md), [15](lessons/15-pi-events.md) — the spine |
 | **A room to teach** | [`teaching/`](teaching/) — slide outline, paper exercises, diagrams |
 | **A problem right now** | [`reference/pitfalls.md`](reference/pitfalls.md) and [`guardrails.md`](reference/guardrails.md) |
@@ -72,9 +71,7 @@ build/        a minimal harness in 7 stages, with its real captured transcripts
 reference/    glossary · pitfalls · guardrails · harness comparison · deep dive
 reading/      annotated bibliography + verbatim source excerpts (offline-usable)
 teaching/     slide outline (45-min and 20-min cuts) · paper exercises · diagrams
-COURSE.md     every lesson in one file
-course.pdf    the same, for a phone
-tools/        regenerates COURSE.md and course.pdf
+tools/        check-transcripts.py, which verifies quoted output against build/
 ```
 
 ## On evidence
@@ -106,12 +103,6 @@ npm run smoke         # runs all seven and asserts what each must demonstrate
 
 Offline, no API key, no cost. Pointing it at a real model takes one line — see
 [`build/README.md`](build/README.md).
-
-## Regenerating the course
-
-```bash
-cd tools && npm install && npm run all    # COURSE.md, then course.pdf
-```
 
 ---
 
