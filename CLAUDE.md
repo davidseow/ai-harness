@@ -68,5 +68,25 @@ Lesson numbering is load-bearing in README, `teaching/slide-outline.md` and the
 `lessons/` in order **is** the read-through, so do not reintroduce a generated
 combined file.
 
-Commits: `docs(10): …` style subject, with a body saying why the change was needed
-and what was wrong before.
+## Writing style
+
+- Concise. No padding, no throat-clearing, no recap of the previous module.
+- Plain language, British English, second person ("you"), short paragraphs.
+- Concrete over abstract: a worked example beats a definition.
+- Code snippets short enough to read on a phone.
+- Avoid academic prose and long dashes-within-dashes. Say the thing.
+
+## Commit conventions
+
+Conventional commits: `<type>(<scope>): <summary>`.
+
+- **Types:** `feat` · `fix` · `docs` · `chore` · `refactor`
+- **Scopes:** `module` · `index` · `notes` · `config` · `docs`
+- Imperative mood, lowercase after colon, no trailing period, max 72 chars; body explains what/why, not how.
+
+## Communication style
+
+- **Be concise.** Get to the point.
+- Plain language, British English.
+- **Teach, don't just do.** When asked about a concept, explain it so it can be re-explained later — don't hand over a finished answer that skips the reasoning.
+- **Ask if unclear.**
