@@ -89,6 +89,61 @@ is the pattern — write tools that throw, and centralise the conversion:
 }
 ```
 
+## Accepted is not correct
+
+Rules 1 and 2 announce themselves when you break them: a vague schema makes the
+model pick the wrong tool, a throwing tool kills the run. Rule 3 is the dangerous
+one, because breaking it produces nothing at all. Both shapes carry the same bytes:
+
+```
+             correct                          split
+assistant    [text, tool_use A, tool_use B]   [text, tool_use A, tool_use B]
+user         [result A, result B]             [result A]
+user                                          [result B]
+```
+
+The API accepts both. The agent answers correctly either way — it did read both
+files. The only symptoms are latency and spend, which are the two things no
+correctness test watches.
+
+**The transcript is not a log — it is a worked example.** This is lesson 03
+collecting its debt. The model is stateless, so every turn re-sends the whole
+conversation and the model predicts its continuation. That makes the conversation a
+few-shot demonstration of *how this conversation goes*, and the model imitates its
+own precedent. A split turn adds one regularity to that demonstration — **one
+result per user message** — which is the shape that, everywhere else, co-occurs
+with one tool call per turn. The cheapest way to continue the pattern is to stop
+calling tools in parallel.
+
+It compounds. Turn 3 has one bad example to imitate, turn 20 has fifteen, so the
+agent gets more serial the longer a session runs — which presents as a
+context-length problem rather than a harness bug.
+
+**And going serial costs more than one extra round trip.** Because the model is
+stateless, every round trip re-sends the whole context, including the ~376 tokens
+of schemas rule 1 already charged you. Reading two files:
+
+| | inference passes | schema rent | file reads |
+|---|---|---|---|
+| parallel | 2 | ~752 tok | overlapped |
+| serial | 3 | ~1,128 tok | sequential |
+
+Parallel is flat at two passes — one to issue the calls, one to resume. Serial is
+`n + 1`. An agent that opens five files at the start of a task pays 2 passes against
+6, and ~752 tokens of schema rent against ~2,256 — on every task, forever. A
+regression in **how many round trips you take** is also a multiplier on every fixed
+per-turn cost you have.
+
+**The general form, which outlives this rule:** the API accepting a shape is not the
+same as the shape being correct. You are not just satisfying a protocol, you are
+writing the example the model will imitate for the rest of the session. Anything
+that renders the transcript in a shape unlike the canonical one degrades behaviour
+silently — Rule 3 is only the most common instance.
+
+So make it structurally impossible rather than remembering to get it right. Collect
+results into an array and append once; never a loop that appends per result, which
+is the natural way to write it and the reason this bug is common.
+
 ## bash versus dedicated tools
 
 `edit` could have been `bash -c "sed -i ..."`. The reason it is not is the whole
@@ -136,8 +191,10 @@ someone points out that throwing ends the run.
 
 **The 60-second version.** Schema is prompt and costs tokens every turn.
 Failures come back as results so the agent can recover. Parallel results go back in
-one message or the model stops parallelising. And promote an action out of bash the
-moment you need to gate, enforce, render, or parallelise it.
+one message or the model stops parallelising — accepted by the API is not the same
+as correct, because the transcript is the example the model imitates. And promote
+an action out of bash the moment you need to gate, enforce, render, or parallelise
+it.
 
 ---
 *Sources: [`build/transcripts/stage2-tools.txt`](../build/transcripts/stage2-tools.txt) · captured 2026-08-31*

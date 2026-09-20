@@ -1,12 +1,13 @@
 /**
  * Render COURSE.md to course.pdf for reading on a phone.
  *
- * Chromium is already on this machine (Playwright's copy), so there is no
+ * Any headless Chrome already on this machine does the rendering, so there is no
  * dependency to install beyond a markdown parser. The print CSS matters more than
  * it looks: the transcripts in this course are wide, monospaced, and the whole
  * point of the PDF is that they stay legible on a small screen.
  */
 import { execFile } from "node:child_process";
+import { existsSync } from "node:fs";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { promisify } from "node:util";
@@ -14,7 +15,28 @@ import { marked } from "marked";
 
 const run = promisify(execFile);
 const root = path.resolve(import.meta.dirname, "..");
-const CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
+
+// Whatever Chrome the machine happens to have. The first build ran in a Linux
+// container against Playwright's copy; hardcoding that path meant the PDF could
+// not be regenerated anywhere else. Override with CHROME_PATH.
+const CHROME_CANDIDATES = [
+  process.env.CHROME_PATH,
+  "/opt/pw-browsers/chromium-1194/chrome-linux/chrome",
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "/Applications/Chromium.app/Contents/MacOS/Chromium",
+  "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+  "/usr/bin/google-chrome",
+  "/usr/bin/chromium",
+  "/usr/bin/chromium-browser",
+];
+const CHROME = CHROME_CANDIDATES.find((c) => c && existsSync(c));
+if (!CHROME) {
+  console.error(
+    "No Chrome found. Install one, or set CHROME_PATH to its binary.\nLooked in:\n  " +
+      CHROME_CANDIDATES.filter(Boolean).join("\n  "),
+  );
+  process.exit(1);
+}
 
 const markdown = await fs.readFile(path.join(root, "COURSE.md"), "utf8");
 const body = marked.parse(markdown, { gfm: true, breaks: false });
