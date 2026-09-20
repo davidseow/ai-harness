@@ -153,6 +153,78 @@ so when policy changes, the harness re-states it into the transcript. The course
 asserts "context is the only state"; Codex's message-insertion behaviour is the
 proof, and it belongs in lesson 03.
 
+**A second gap, and this one is about the reader rather than the author.**
+[Lesson 08](../lessons/08-stage3-prompt.md) prices the system prompt as rent and
+tells the *harness author* not to edit it mid-session. But most people meet this
+mechanism from the other side — they run one of these three, they never place a
+`cache_control` breakpoint in their life, and the prefix rule reaches them as a
+handful of commands that quietly reset their session's cache.
+
+Claude Code is the worked example. Everything below follows from the invalidation
+hierarchy in lesson 08; only the command names are product-specific.
+
+| What you do | What it invalidates | What you feel |
+|---|---|---|
+| `/model` mid-session | **Everything** — caches are model-scoped, and this is the one change with no escape hatch | Next turn re-prefills the whole conversation |
+| `/fast` toggle | System + messages — `speed` is a request parameter | One expensive turn |
+| `/compact`, or auto-compact | Messages from the summary onward; tools and system survive | The classic "why was *that* turn slow" |
+| `/clear`, or a new session | Everything, by definition | Full re-prefill of whatever you re-prime it with |
+| A gap longer than the TTL | The entry expires | First message back is slow and charged in full |
+| Editing `CLAUDE.md` mid-session | Depends where the harness puts it — see below | Possibly nothing, possibly a rebuild |
+| Connecting or removing an MCP server | Classically everything, since tools render at position 0 — see below | Possibly nothing now |
+
+**Two of those rows cannot be settled from the API mechanism**, and it is worth
+saying so rather than guessing:
+
+- **`CLAUDE.md` mid-session.** Whether an edit is re-read at all, and whether it
+  lands in the cached `system` prefix or is injected into `messages` after it, is
+  the harness's choice. The second is free; the first is a rebuild.
+- **MCP servers mid-session.** The old answer was "a full rebuild, tools are at
+  position 0". Two mechanisms now avoid it — tool search *appends* schemas rather
+  than swapping the list, and `tool_addition` / `tool_removal` blocks (Opus 5
+  onward) change the tool set without touching the prefix. Sessions running
+  deferred tools loaded on demand are visibly using the first. Whether a given
+  harness routes an MCP connect through either is not something the docs settle.
+
+**The habits that follow** are short, and they are most of the available leverage:
+
+1. **Choose the model at the top of a session.** It is the only change with no
+   escape hatch. For a cheaper sub-task, spawn a subagent — separate context,
+   separate cache namespace, the main loop's prefix untouched.
+2. **Let sessions run; do not `/clear` and re-prime.** A long session has a huge
+   prefix, but it is *cached* — roughly 0.1× per turn. A fresh session pays 1× to
+   rebuild whatever you feed it. Re-priming is the expensive move, not continuing.
+3. **Expect exactly one slow turn after `/compact`** or a long break. That is the
+   cache re-forming at the new prefix, not a fault.
+4. **Stable context in `CLAUDE.md`, volatile context in the conversation.**
+   Conventions and architecture belong in the file that is read once at startup and
+   sits in the cached front. Anything that changes — today's state, a ticket, the
+   current test output — belongs in a message, where it invalidates nothing ahead
+   of it. This is lesson 08's rule restated for the person at the keyboard.
+5. **Do not thrash MCP servers mid-session** until you know which path your setup
+   takes.
+
+**Observing it.** The ground truth is the same two `usage` fields a harness author
+reads: `cache_read_input_tokens` and `cache_creation_input_tokens`. Claude Code
+surfaces a per-session cost and usage summary. The healthy signature is reads
+dominating and growing turn over turn while writes stay small — just the last
+turn's delta. Writes near the full conversation size on every turn mean something
+upstream is rewriting the prefix.
+
+**On the TTL.** The public default is 5 minutes, with a 1-hour option at double the
+write price. A Claude Code session observed on 2026-09-20 reported running on the
+1-hour TTL, dropping to 5 minutes if the account enters usage overage. That is an
+observation from one running session, not a documented guarantee — but it changes
+the "I walked away from the terminal" arithmetic by a factor of twelve, so it is
+worth knowing which one you are on.
+
+**The honest size of this.** As a user your leverage is genuinely small: do not
+churn model, mode or tools mid-session, and do not reflexively `/clear`. The
+prefill economics matter enormously when you are *building* a harness, which is why
+the course puts them in a lesson about writing one. When you are running one, they
+mostly explain why certain turns feel slow — which is worth knowing precisely, so
+you stop wondering.
+
 ### 3.4 Stage 4 — context
 
 `build/src/shared/context.ts` gives `truncateToolResult()` (at
@@ -514,6 +586,10 @@ three failure modes are the same mistake: **not knowing which layer is holding.*
 - Sandboxing reference (Seatbelt/bubblewrap, defaults, protected paths, fail-open,
   what is *not* sandboxed) — `https://code.claude.com/docs/en/sandboxing`
 - Agent SDK — `https://code.claude.com/docs/en/agent-sdk`
+- Prompt caching (prefix rule, render order, read/write multipliers, TTLs,
+  invalidation hierarchy, `usage` fields) —
+  `https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching` —
+  verified 2026-09-20
 
 **Codex CLI — primary**
 - Hooks (12 events, `config.toml` syntax, enabled by default) —
