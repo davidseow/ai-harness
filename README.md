@@ -68,7 +68,7 @@ consequences.
 ```
 lessons/      21 lessons + orientation, one idea each, 3–5 min
 build/        a minimal harness in 7 stages, with its real captured transcripts
-reference/    glossary · pitfalls · guardrails · harness comparison · deep dive
+reference/    glossary · pitfalls · guardrails · fork recovery · harness comparison · deep dive
 reading/      annotated bibliography + verbatim source excerpts (offline-usable)
 teaching/     slide outline (45-min and 20-min cuts) · paper exercises · diagrams
 tools/        check-transcripts.py, which verifies quoted output against build/

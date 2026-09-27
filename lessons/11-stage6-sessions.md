@@ -116,6 +116,9 @@ agent saw is in it, including whatever leaked into a tool result).
   compaction sections together. They are the same idea from two directions.
 - **[`build/src/shared/session.ts`](../build/src/shared/session.ts)** — append,
   replay, and fork in ~90 lines. `fork()` is six lines, which is the point.
+- **[`reference/fork-recovery.md`](../reference/fork-recovery.md)** — the turn-6
+  question worked end to end: finding the bad turn, resetting the files, and
+  re-asking from before it.
 
 ## Teach it
 
