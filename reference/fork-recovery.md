@@ -9,7 +9,8 @@ Background: [lesson 11](../lessons/11-stage6-sessions.md) (why fork works) and
 
 > **The example below is illustrative.** It is not a captured transcript. The pi
 > command descriptions are quoted from [`excerpts.md` §5](../reading/excerpts.md);
-> everything else on this page is practice, not pi documentation.
+> the Claude Code commands are from its own docs, not `excerpts.md`. Everything
+> else on this page is practice, not pi documentation.
 
 ---
 
@@ -63,11 +64,33 @@ From [`excerpts.md` §5](../reading/excerpts.md):
 
 4. **Reset the workspace.** Edits and commands from the bad branch really
    happened. Put the files back before you fork.
-5. **Fork from your message before the bad turn.**
+5. **Fork from your message before the bad turn.** See [How to fork](#how-to-fork)
+   below.
 6. **Re-ask with the gap closed.** Change the message, don't resend it. Add the
    facts the bad branch taught you, and leave out its reasoning.
 7. **If you keep forking at the same point, fix the source.** A correction you
    need every session belongs in the system prompt or project instructions.
+
+### How to fork
+
+Noticing late is normal, and it costs nothing. The point you return to is not
+"one turn back"; it is any earlier message of yours, and the log keeps them all.
+Spot the problem at turn 20 and you can still fork from turn 5.
+
+The command is the easy part. It lists your earlier messages, you pick one, and a
+new branch starts from just before it. Everything after it is left out of the new
+history; the old branch stays.
+
+- **pi:** `/fork` starts a new session file "from a previous user message on the
+  active branch". `/tree` does the same in place: "Select any previous point,
+  continue from there".
+- **Claude Code:** press Esc twice, or run `/rewind`. Pick an earlier prompt, then
+  choose to restore the conversation, the code, or both. Code restore covers only
+  edits made by its file tools; anything done through `bash` stays, so step 4
+  still applies.
+
+The hard part is choosing the message. That is steps 1–3: name the belief, find
+where it was first *claimed*, and fork from your message just before that.
 
 ### If reading the log is not enough
 
