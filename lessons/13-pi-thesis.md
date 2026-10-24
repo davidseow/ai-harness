@@ -42,8 +42,10 @@ the rest.
 Three of the six are worth arguing with:
 
 - **"No to-dos. They confuse models."** An empirical claim about model behaviour,
-  stated flatly. It may or may not hold for your model and tasks — but notice it is
-  the kind of claim you could actually test.
+  stated flatly. The launch post's only support is "in my experience", plus a
+  mechanism: to-dos "add state that the model has to track and update"
+  ([§11](../reading/excerpts.md)). It may or may not hold for your model and
+  tasks — but notice it is the kind of claim you could actually test.
 - **"No permission popups. Run in a container."** Lesson 10's route 2. Coherent, and
   it moves work onto you.
 - **"No MCP."** The most contested. pi's author argues CLI tools with READMEs beat a
@@ -53,8 +55,8 @@ Three of the six are worth arguing with:
 ## A correction worth making
 
 You will read, in several places, that pi ships "four tools" and a "sub-1,000-token
-system prompt". **Neither figure appears in pi's documentation.** The verified list
-is eight:
+system prompt". **Neither figure appears in pi's current documentation.** The
+verified list is eight:
 
 > Available built-in tools: `read`, `bash`, `powershell` (Windows), `edit`,
 > `write`, `grep`, `find`, `ls`
@@ -63,9 +65,21 @@ is eight:
 Seven cross-platform, plus `powershell` on Windows. The prompt size is not stated
 anywhere in the docs, so this course does not repeat it.
 
-This is worth flagging for its own sake: **secondary summaries of agent harnesses
-drift fast, and the numbers are the first thing to go.** The primary source took
-about ninety seconds to check. Do that before teaching a number to anyone.
+So where did the figures come from? The author's own launch post, in November
+2025 ([`excerpts.md` §11](../reading/excerpts.md)):
+
+> By default these are disabled, so the agent only gets the four tools above.
+
+> pi's system prompt and tool definitions together come in below 1000 tokens.
+
+The summaries were accurate. pi moved. An earlier version of this lesson blamed
+the summaries for drifting; that was wrong, and the correction is recorded atop
+`excerpts.md`.
+
+That is the more useful lesson: **agent harnesses change faster than the write-ups
+about them, and the numbers are the first thing to go.** A correct quote from an
+old primary source is still out of date. Check the source *and its date* before
+teaching a number to anyone.
 
 The minimal-core thesis does not need the tidy figures. The six refusals make the
 case far better, and they are verbatim.
@@ -122,6 +136,6 @@ That is a real design position, and it hands you responsibilities along with the
 freedom.
 
 ---
-*Sources: [`reading/excerpts.md`](../reading/excerpts.md) §1, §4, §10 · verified 2026-08-31*
+*Sources: [`reading/excerpts.md`](../reading/excerpts.md) §1, §4, §10 · verified 2026-08-31 · §11 verified 2026-10-24*
 
 **Next:** [14 — How pi assembles a system prompt](14-pi-context-assembly.md)

@@ -87,11 +87,13 @@ stage that quietly needed credentials would fail.
 [`reading/excerpts.md`](reading/excerpts.md), verbatim from its repository, fetched
 2026-08-31, so you can check any claim without a network connection.
 
-**One correction is recorded.** Widely repeated summaries say pi ships "four tools"
-and a "sub-1,000-token system prompt". Neither figure appears in pi's documentation —
-the verified tool list is eight. Both numbers are dropped, and the correction is
-noted at the top of `excerpts.md` rather than quietly fixed. Secondary sources about
-agent harnesses drift fast, and the numbers go first.
+**Corrections are recorded.** Widely repeated summaries say pi ships "four tools"
+and a "sub-1,000-token system prompt". Neither figure appears in pi's current
+documentation — the verified tool list is eight. Both numbers came from the author's
+own launch post in November 2025; the summaries were accurate, and pi moved on. The
+numbers are dropped, and the correction (including an earlier wrong explanation of
+it) is noted at the top of `excerpts.md` rather than quietly fixed. Harnesses change
+faster than the write-ups about them: check a source's date as well as the source.
 
 ## Running the code (optional)
 

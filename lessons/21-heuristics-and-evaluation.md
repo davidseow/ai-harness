@@ -56,7 +56,7 @@ disagree about almost everything else.
 | Subagents | refused — "spawn pi instances via tmux" | built in |
 | Plan mode | refused — "write plans to files" | built in |
 | MCP | refused — "build CLI tools with READMEs" | supported |
-| To-dos | refused — "they confuse models" | built in |
+| To-dos | refused — "they confuse models" | built in, but off by default on newer models |
 | Extension model | ~30 lifecycle events, TS modules, pi packages | hooks, skills, subagents, MCP servers |
 | Sessions | JSONL tree, `/tree` `/fork` `/clone` | sessions with resume |
 | Trust boundary | project trust prompt + container | permission modes + trust prompt |
@@ -125,7 +125,7 @@ features. Measure turns and cost per completed task. And get an eval, because
 without one you are guessing confidently.
 
 ---
-*Sources: [`reading/excerpts.md`](../reading/excerpts.md) §1, §4 · verified 2026-08-31*
+*Sources: [`reading/excerpts.md`](../reading/excerpts.md) §1, §4 · verified 2026-08-31 · §12 verified 2026-10-24*
 
 **End of the course.** The [reference/](../reference/) directory is the part you
 will come back to; [teaching/](../teaching/) is the part you hand to someone else.

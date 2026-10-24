@@ -7,12 +7,26 @@ any claim against its source.
 Fetched from `https://raw.githubusercontent.com/earendil-works/pi-mono/main/…`
 on **2026-08-31**. pi moves fast; re-fetch before teaching from this.
 
-> **A correction worth recording.** Secondary write-ups of pi commonly say it ships
-> "four tools" and a "sub-1,000-token system prompt". Neither figure appears in
-> pi's own documentation. The verified tool list is **eight** (§4 below), and the
-> prompt size is not stated anywhere in the docs. Both numbers are dropped from
-> this course. The minimal-core thesis does not need them — §1 states it far
-> better, in pi's own words.
+> **A correction worth recording.** Write-ups of pi commonly say it ships "four
+> tools" and a "sub-1,000-token system prompt". Neither figure appears in pi's
+> current documentation: the tool list is **eight** (§4 below), and the prompt size
+> is not stated. Both numbers are dropped from this course. The minimal-core thesis
+> does not need them — §1 states it far better, in pi's own words.
+>
+> *Revised 2026-10-24.* This note first blamed the figures on secondary summaries
+> drifting. That was wrong. Both come from the author's own launch post of
+> 2025-11-30 (§11), and the summaries quoted it accurately. What drifted was pi,
+> not the summaries: four tools at launch, eight in the README by 2026-08-31. The
+> lesson is about dates, not about secondary sources: an accurate quote from an old
+> primary source is still out of date.
+
+> **A second correction, 2026-10-24.** Lesson 21 said Claude Code has to-dos
+> "built in". That is no longer true by default: on newer models Claude Code
+> leaves its task-tracking tools out (§12). The row now says so.
+
+§11 and §12 are not from pi's repository. §11 is the pi author's launch post,
+which gives the reasoning the README leaves out; §12 is Claude Code's docs, for
+the comparison in lesson 21. Both were fetched on **2026-10-24**.
 
 ---
 
@@ -290,3 +304,71 @@ trust boundaries at all.
 The seam that matters is between `pi-ai` (talking to providers) and
 `pi-agent-core` (running the loop). Getting that seam right is what lets one
 harness target OpenAI, Anthropic and Google without the loop knowing which.
+
+---
+
+## 11. The author's reasoning — why to-dos and plan mode are refused
+
+*Source: Mario Zechner, "What I learned building an opinionated and minimal
+coding agent", 2025-11-30, `https://mariozechner.at/posts/2025-11-30-pi-coding-agent/`*
+
+*"No built-in to-dos":*
+
+> pi does not and will not support built-in to-dos. In my experience, to-do lists
+> generally confuse models more than they help. They add state that the model has
+> to track and update, which introduces more opportunities for things to go wrong.
+>
+> If you need task tracking, make it externally stateful by writing to a file:
+
+followed by a `TODO.md` of checkboxes, and:
+
+> The agent can read and update this file as needed. Using checkboxes keeps track
+> of what's done and what remains. Simple, visible, and under your control.
+
+*"No plan mode":*
+
+> pi does not and will not have a built-in plan mode. Telling the agent to think
+> through a problem together with you, without modifying files or executing
+> commands, is generally sufficient.
+
+> The agent can read, update, and reference the plan as it works. Unlike ephemeral
+> planning modes that only exist within a session, file-based plans can be shared
+> across sessions, and can be versioned with your code.
+
+> In short, I need observability for planning and I don't get that with Claude
+> Code's plan mode.
+
+*The principle behind both, from the introduction:*
+
+> Exactly controlling what goes into the model's context yields better outputs,
+> especially when it's writing code. Existing harnesses make this extremely hard or
+> impossible by injecting stuff behind your back that isn't even surfaced in the UI.
+
+Note what the to-do argument is and is not. It is not "markdown beats a
+database": the key phrase is **externally stateful**. A built-in to-do is a
+special tool plus state the harness holds and feeds back; a `TODO.md` is an
+ordinary file, changed with the same tools as everything else, that you can see.
+The claim itself rests on "in my experience" — no evaluation is offered.
+
+*The same post, on the launch toolset and prompt:*
+
+> By default these are disabled, so the agent only gets the four tools above.
+
+> pi's system prompt and tool definitions together come in below 1000 tokens.
+
+---
+
+## 12. Claude Code — the to-do tools, now off by default on newer models
+
+*Source: `https://code.claude.com/docs/en/tools-reference`, "Task tool availability"*
+
+> The task-tracking tools, `TaskCreate`, `TaskGet`, `TaskUpdate`, `TaskList`, and
+> `TodoWrite`, are available by default only on Opus 4.7, Sonnet 4.6, Haiku 4.5,
+> and earlier models.
+
+> On newer models, Claude keeps track of multi-step work without a written
+> checklist, and the tools' definitions and reminders take up context.
+
+Same conclusion as §11, different reason. Zechner says the tools hurt; Anthropic
+says newer models no longer need them and they cost context. Neither publishes an
+evaluation.

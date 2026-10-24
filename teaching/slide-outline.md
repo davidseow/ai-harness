@@ -103,9 +103,11 @@ output. Say so. A room that suspects the numbers were chosen to make a point sto
 listening, and these were not.
 
 **The one correction to make explicitly.** Widely repeated summaries say pi ships
-"four tools" and a "sub-1,000-token prompt". Neither appears in pi's docs; the real
-tool list is eight. Show the primary source. It teaches source discipline better
-than saying "check your sources", and it takes thirty seconds.
+"four tools" and a "sub-1,000-token prompt". Neither appears in pi's current docs;
+the real tool list is eight. Then the twist: both figures came from the author's
+own launch post, and the summaries quoted it correctly. pi moved. Show both
+sources and their dates. It teaches source discipline better than saying "check
+your sources", and it takes thirty seconds.
 
 **Do not defend a harness.** pi and Claude Code are two coherent bets, not a right
 and a wrong answer. The moment it becomes a tool debate you lose the transferable
