@@ -19,6 +19,14 @@ Say what it is not, because these get confused constantly:
 
 Only the gate enforces. Everything else persuades.
 
+That does not make the prompt useless. Keep both, for different jobs:
+
+> 🛡️ **The prompt is what makes a well-behaved model cooperate, and the guard is
+> what protects you when it doesn't.**
+
+The prompt keeps the gate quiet on a good day. The gate is the only thing that
+counts on a bad one.
+
 The second half of the lesson is about testing it. A policy that exists is not a
 policy that works. The only test that means anything is: **let the agent attempt
 the bad thing, then check the world.** Not the transcript — the world.

@@ -53,7 +53,9 @@ Two demonstrations, both with real output:
   turns 1–3 and gone from turn 4. Emphasise: nothing errored, and the agent cannot
   know.
 - **The permission gate.** The BLOCKED lines, then `reports/q3.csv still on disk:
-  YES`. Emphasise: the filesystem check is the test; the log line is not.
+  YES`. Emphasise: the filesystem check is the test; the log line is not. Land
+  the line: **the prompt is what makes a well-behaved model cooperate, and the
+  guard is what protects you when it doesn't.**
 
 ### 5. Where you get to stand (8 min) — lesson 15
 
