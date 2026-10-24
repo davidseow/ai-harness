@@ -150,6 +150,27 @@ them. And a bouncer you have never seen turn anyone away is a man in a jacket.
 The common answers — the prompt, the tool descriptions, the model — are all wrong,
 and the correction is the lesson.
 
+**The half-right answer.** Someone will say "tools and hooks". The hook half is
+right: in this harness the gate *is* a hook, wired in as
+`beforeTool: gate.check` and called by `loop.ts` before every tool runs. The tools
+half is not. A tool is the action, the thing that does the damage. `bash` does not
+protect you from `rm -rf`; it runs it. So the answer is a hook *in front of* the
+tools.
+
+Tools still matter, because their shape sets how good the hook can be. A `bash`
+call hands the hook an opaque string to pattern-match. A `delete_path` call hands
+it a typed `path` to resolve. Same hook, very different strength.
+
+And not every hook is a boundary. It counts only if it:
+
+1. **can refuse**, not just watch. `afterTool` is a hook too, and it runs after
+   the damage.
+2. **runs in code the model cannot change.** The model only ever sends a request.
+3. **has been seen firing**, judged by the world rather than the audit log.
+
+The full answer: a hook that can refuse, made precise by typed tools, backed by a
+container for whatever it misses.
+
 **The 60-second version.** The gate between ask and action is the only enforcement
 you have. Denials come back as results so the agent recovers. Pattern-matching bash
 is a blocklist and loses, so promote actions to typed tools and bound the blast
