@@ -84,8 +84,9 @@ quote. Nothing was written by hand to make a point. Regenerate with
 stage that quietly needed credentials would fail.
 
 **The pi.dev claims are quoted.** Everything attributed to pi is in
-[`reading/excerpts.md`](reading/excerpts.md), verbatim from its repository, fetched
-2026-08-31, so you can check any claim without a network connection.
+[`reading/excerpts.md`](reading/excerpts.md), verbatim from its repository (fetched
+2026-08-31) and its author's launch post (fetched 2026-10-24), so you can check any
+claim without a network connection.
 
 **Corrections are recorded.** Widely repeated summaries say pi ships "four tools"
 and a "sub-1,000-token system prompt". Neither figure appears in pi's current

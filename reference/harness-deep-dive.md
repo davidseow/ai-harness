@@ -479,8 +479,8 @@ Concrete, with locations. Ordered by severity.
 
 None of these is a research error. Every one is the course being accurate about 2026's
 harnesses as of the pi-centred reading in August and the field having moved — which
-is itself the point `README.md`'s "On evidence" section makes about secondary sources
-drifting fast. The fix is the same one the README already models: record the
+is itself the point `README.md`'s "On evidence" section makes: harnesses change faster
+than the write-ups about them. The fix is the same one the README already models: record the
 correction rather than quietly patching it.
 
 ---
