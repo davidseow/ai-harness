@@ -19,6 +19,7 @@ or a network connection.
 | **A room to teach** | [`teaching/`](teaching/) — slide outline, paper exercises, diagrams |
 | **A problem right now** | [`reference/pitfalls.md`](reference/pitfalls.md) and [`guardrails.md`](reference/guardrails.md) |
 | **A harness to choose** | [`reference/harness-deep-dive.md`](reference/harness-deep-dive.md) — Claude Code, Codex CLI and OpenCode, dissected against this course |
+| **Quality engineering** | [`quality/`](quality/) — 18 bite-sized follow-ons on testing and evaluating a harness, with an offline phone app and paper exercises |
 
 New here? [`lessons/00-orientation.md`](lessons/00-orientation.md).
 

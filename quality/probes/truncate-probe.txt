@@ -1,0 +1,7 @@
+max=400  input=1000  output= 389  holds
+max=100  input=1000  output=  89  holds
+max= 70  input=1000  output=  59  holds
+max= 62  input=1000  output=  51  holds
+max= 61  input=1000  output=1050  BROKEN
+max= 60  input=1000  output=1050  BROKEN
+max= 40  input=1000  output=2030  BROKEN

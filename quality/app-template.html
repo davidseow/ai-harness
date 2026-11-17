@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Harness Quality Track</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one narrow reading column; a sticky test-runner bar on top; system fonts only so it works offline. */
+:root {
+  --paper: #f2f4f6; --sheet: #ffffff; --ink: #18212b; --muted: #586674; --rule: #d6dde4;
+  --accent: #a34a06; --accent-soft: #fbecdf; --pass: #1d7347; --pass-soft: #e2f3ea; --fail: #b02a1e; --fail-soft: #fbe6e3;
+  --code-bg: #e9edf1;
+  --display: "Iowan Old Style", "Charter", "Palatino Linotype", Georgia, ui-serif, serif;
+  --body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #0f141a; --sheet: #161d25; --ink: #e5eaef; --muted: #98a6b4; --rule: #2a3542;
+  --accent: #f2a65a; --accent-soft: #33240f; --pass: #5cc994; --pass-soft: #12301f; --fail: #f2837a; --fail-soft: #3a1714;
+  --code-bg: #1f2833; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --paper: #0f141a; --sheet: #161d25; --ink: #e5eaef; --muted: #98a6b4; --rule: #2a3542;
+  --accent: #f2a65a; --accent-soft: #33240f; --pass: #5cc994; --pass-soft: #12301f; --fail: #f2837a; --fail-soft: #3a1714;
+  --code-bg: #1f2833; color-scheme: dark; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--body); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--sheet); }
+.wrap { max-width: 42rem; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--sheet); border-bottom: 1px solid var(--rule); }
+header .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding-block: 10px; }
+.brand { font: 600 1.05rem/1.2 var(--display); color: var(--ink); text-decoration: none; margin-right: auto; }
+.run { font: 0.78rem/1.3 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; width: 100%; order: 3; }
+.run b { color: var(--pass); font-weight: 600; }
+nav { display: flex; gap: 4px; }
+nav a { font: 500 0.85rem/1 var(--body); color: var(--muted); text-decoration: none; padding: 8px 10px; border-radius: 6px; }
+nav a[aria-current="page"] { color: var(--ink); background: var(--code-bg); }
+main { padding-block: 20px 64px; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.2; text-wrap: balance; }
+h1 { font-size: 1.75rem; margin: 0.2rem 0 0.8rem; }
+h2 { font-size: 1.3rem; margin: 2rem 0 0.6rem; }
+h3 { font-size: 1.08rem; margin: 1.4rem 0 0.4rem; }
+p, li { max-width: 65ch; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+code { font: 0.86em var(--mono); background: var(--code-bg); padding: 0.1em 0.3em; border-radius: 4px; overflow-wrap: anywhere; }
+pre { margin: 0; padding: 12px 14px; background: var(--code-bg); border-radius: 8px; font: 0.8rem/1.5 var(--mono); }
+pre code { background: none; padding: 0; overflow-wrap: normal; }
+.scroll { overflow-x: auto; margin: 1rem 0; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; font-size: 0.88rem; min-width: 100%; }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--rule); }
+th { font-weight: 600; white-space: nowrap; }
+blockquote { margin: 1rem 0; padding: 10px 14px; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 6px 6px 0; }
+details { margin: 0.8rem 0; border: 1px solid var(--rule); border-radius: 8px; padding: 0 14px; background: var(--sheet); }
+details > summary { cursor: pointer; padding: 12px 0; font-weight: 600; color: var(--accent); }
+details[open] { padding-bottom: 8px; }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 2rem 0; }
+.ref { border-bottom: 1px dotted var(--muted); }
+.eyebrow { font: 0.75rem/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.oneline { font-size: 1.05rem; padding: 12px 14px; background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--rule); background: var(--sheet); font-weight: 600; text-decoration: none; color: var(--ink); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--sheet); }
+.btn.done { background: var(--pass-soft); border-color: var(--pass); color: var(--pass); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.between { justify-content: space-between; }
+
+/* track */
+.intro { color: var(--muted); max-width: 60ch; }
+.module { margin-top: 1.8rem; }
+.module h2 { margin: 0 0 0.3rem; display: flex; gap: 10px; align-items: baseline; }
+.module h2 .eyebrow { flex: none; }
+.list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--rule); }
+.list li { max-width: none; border-bottom: 1px solid var(--rule); }
+.list a { display: grid; grid-template-columns: 1.6rem 2rem 1fr auto; gap: 8px; align-items: baseline; padding: 12px 2px; color: var(--ink); text-decoration: none; }
+.list .st { font-family: var(--mono); color: var(--muted); }
+.list .st.ok { color: var(--pass); }
+.list .n { font: 0.85rem var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.list .t { min-width: 0; }
+.list .m { font: 0.78rem var(--mono); color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.next { display: grid; gap: 4px; padding: 16px; margin-top: 1rem; background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; text-decoration: none; color: var(--ink); }
+.next .t { font: 600 1.15rem/1.3 var(--display); }
+.reset { margin-top: 3rem; color: var(--muted); font-size: 0.85rem; }
+
+/* quiz */
+.quiz { margin-top: 2.2rem; }
+.q { margin: 1.2rem 0 1.6rem; }
+.q > p { font-weight: 600; margin: 0 0 0.6rem; }
+.opts { display: grid; gap: 8px; }
+.opt { text-align: left; display: grid; grid-template-columns: 1.8rem 1fr; gap: 8px; align-items: baseline; padding: 11px 12px; border: 1px solid var(--rule); border-radius: 8px; background: var(--sheet); min-height: 44px; }
+.opt .k { font: 600 0.85rem var(--mono); color: var(--muted); }
+.opt.right { border-color: var(--pass); background: var(--pass-soft); }
+.opt.wrong { border-color: var(--fail); background: var(--fail-soft); }
+.opt[disabled] { cursor: default; }
+.why { margin-top: 10px; padding: 10px 12px; border-radius: 8px; font-size: 0.95rem; background: var(--code-bg); }
+.why .verdict { font: 600 0.82rem var(--mono); display: block; margin-bottom: 2px; }
+.why .verdict.ok { color: var(--pass); }
+.why .verdict.no { color: var(--fail); }
+.foot { margin-top: 2.4rem; padding-top: 1.2rem; border-top: 1px solid var(--rule); display: grid; gap: 12px; }
+
+/* cards */
+.deck-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: var(--sheet); padding: 8px 12px; min-height: 40px; font-size: 0.88rem; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--code-bg); color: var(--ink); font-weight: 600; }
+.card { width: 100%; min-height: 15rem; display: grid; align-content: center; gap: 10px; padding: 24px 20px; text-align: left; border: 1px solid var(--rule); border-radius: 14px; background: var(--sheet); }
+.card .side { font: 0.75rem var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+.card .face { font: 1.25rem/1.4 var(--display); }
+.card.back .face { font: 1rem/1.55 var(--body); }
+.card .hint { font-size: 0.8rem; color: var(--muted); }
+.grade { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+.counter { font: 0.82rem var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.empty { padding: 24px; text-align: center; color: var(--muted); border: 1px dashed var(--rule); border-radius: 12px; }
+@media (prefers-reduced-motion: no-preference) { .card { transition: transform 0.12s ease; } .card:active { transform: scale(0.99); } }
+@media (min-width: 560px) { .run { width: auto; order: 0; } }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="brand" href="#home">Harness QE</a>
+  <nav aria-label="Sections">
+    <a href="#home" data-view="home">Track</a>
+    <a href="#cards" data-view="cards">Cards</a>
+    <a href="#notebook" data-view="notebook">Notebook</a>
+  </nav>
+  <div class="run" id="run" aria-live="polite"></div>
+</div></header>
+<main class="wrap" id="app"></main>
+<script>
+const DATA = /*__DATA__*/null;
+const KEY = 'harness-qe-v1';
+let state = { done: {}, quiz: {}, cards: {} };
+try { const raw = localStorage.getItem(KEY); if (raw) state = Object.assign(state, JSON.parse(raw)); } catch (e) {}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+const app = document.getElementById('app');
+const bites = DATA.bites;
+const modules = [];
+for (const b of bites) {
+  let m = modules.find(x => x.id === b.module);
+  if (!m) modules.push(m = { id: b.module, name: b.moduleName, bites: [] });
+  m.bites.push(b);
+}
+
+function quizScore(b) {
+  let right = 0, answered = 0;
+  b.quiz.forEach((q, i) => { const a = state.quiz[b.id + '-' + i]; if (a) { answered++; if (a === q.answer) right++; } });
+  return { right, answered, total: b.quiz.length };
+}
+
+function renderRun() {
+  const done = bites.filter(b => state.done[b.id]).length;
+  let right = 0, answered = 0;
+  bites.forEach(b => { const s = quizScore(b); right += s.right; answered += s.answered; });
+  const total = bites.reduce((n, b) => n + b.quiz.length, 0);
+  document.getElementById('run').innerHTML =
+    `<b>✓ ${done}</b> done · ○ ${bites.length - done} to go · quiz ${right}/${answered} of ${total}`;
+}
+
+function setNav(view) {
+  document.querySelectorAll('nav a').forEach(a => {
+    if (a.dataset.view === view) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+  });
+}
+
+function home() {
+  setNav('home');
+  const next = bites.find(b => !state.done[b.id]);
+  let h = `<p class="eyebrow">AI harness · quality engineering</p>
+    <h1>The quality track</h1>
+    <p class="intro">Eighteen bites of 3–5 minutes, on top of the 21-lesson course. Each ends with a two-question check and a paper exercise from the notebook. Works offline; progress stays on this device.</p>`;
+  h += next
+    ? `<a class="next" href="#bite-${next.id}"><span class="eyebrow">Next up · ${next.module} · ~${next.minutes} min</span><span class="t">${next.id} — ${next.title}</span><span>${next.oneline}</span></a>`
+    : `<div class="next"><span class="eyebrow">Track complete</span><span class="t">All eighteen bites done.</span><span>Try the capstone in the <a href="#notebook">notebook</a>, then drill the <a href="#cards">cards</a> you marked “again”.</span></div>`;
+  for (const m of modules) {
+    const mins = m.bites.reduce((n, b) => n + b.minutes, 0);
+    h += `<section class="module"><h2><span class="eyebrow">${m.id}</span>${m.name}</h2>
+      <p class="eyebrow">${m.bites.length} bites · ~${mins} min</p><ul class="list">`;
+    for (const b of m.bites) {
+      const s = quizScore(b), ok = state.done[b.id];
+      h += `<li><a href="#bite-${b.id}"><span class="st ${ok ? 'ok' : ''}" aria-label="${ok ? 'done' : 'not done'}">${ok ? '✓' : '○'}</span><span class="n">${b.id}</span><span class="t">${b.title}</span><span class="m">${s.answered ? s.right + '/' + s.total : '~' + b.minutes + 'm'}</span></a></li>`;
+    }
+    h += `</ul></section>`;
+  }
+  h += `<div class="reset row"><span>Start again from zero?</span><button class="btn" id="reset">Reset progress</button></div>`;
+  app.innerHTML = h;
+  const r = document.getElementById('reset');
+  r.onclick = () => {
+    if (r.dataset.armed) { state = { done: {}, quiz: {}, cards: {} }; save(); renderRun(); home(); return; }
+    r.dataset.armed = '1'; r.textContent = 'Tap again to erase'; r.classList.add('primary');
+  };
+}
+
+function bite(id) {
+  setNav('home');
+  const i = bites.findIndex(b => b.id === id);
+  if (i < 0) return home();
+  const b = bites[i], prev = bites[i - 1], next = bites[i + 1];
+  let h = `<p class="eyebrow">${b.module} ${b.moduleName} · ~${b.minutes} min</p>
+    <h1>${b.id} — ${b.title}</h1><p class="oneline">${b.oneline}</p>${b.html}
+    <section class="quiz"><h2>Check yourself</h2>`;
+  b.quiz.forEach((q, qi) => {
+    h += `<div class="q" data-q="${qi}"><p>${q.q}</p><div class="opts">` +
+      q.options.map(o => `<button class="opt" data-k="${o.k}"><span class="k">${o.k}</span><span>${o.text}</span></button>`).join('') +
+      `</div><div class="why-slot"></div></div>`;
+  });
+  h += `</section><div class="foot">
+      <button class="btn ${state.done[b.id] ? 'done' : 'primary'}" id="done">${state.done[b.id] ? '✓ Done · tap to undo' : 'Mark as done'}</button>
+      <div class="row between">${prev ? `<a class="btn" href="#bite-${prev.id}">← ${prev.id}</a>` : '<a class="btn" href="#home">Track</a>'}
+      ${next ? `<a class="btn" href="#bite-${next.id}">${next.id} →</a>` : '<a class="btn" href="#notebook">Notebook →</a>'}</div></div>`;
+  app.innerHTML = h;
+  b.quiz.forEach((q, qi) => paintQuestion(b, qi));
+  app.querySelectorAll('.q').forEach(el => el.addEventListener('click', e => {
+    const opt = e.target.closest('.opt'); if (!opt || opt.disabled) return;
+    state.quiz[b.id + '-' + el.dataset.q] = opt.dataset.k; save(); paintQuestion(b, +el.dataset.q); renderRun();
+  }));
+  document.getElementById('done').onclick = () => {
+    if (state.done[b.id]) delete state.done[b.id]; else state.done[b.id] = Date.now();
+    save(); renderRun();
+    if (state.done[b.id] && next) location.hash = 'bite-' + next.id; else bite(b.id);
+  };
+  window.scrollTo(0, 0);
+}
+
+function paintQuestion(b, qi) {
+  const q = b.quiz[qi], el = app.querySelector(`.q[data-q="${qi}"]`);
+  const picked = state.quiz[b.id + '-' + qi];
+  if (!picked) return;
+  el.querySelectorAll('.opt').forEach(o => {
+    o.disabled = true;
+    if (o.dataset.k === q.answer) o.classList.add('right');
+    else if (o.dataset.k === picked) o.classList.add('wrong');
+  });
+  const ok = picked === q.answer;
+  el.querySelector('.why-slot').innerHTML = `<div class="why"><span class="verdict ${ok ? 'ok' : 'no'}">${ok ? '✓ pass' : '✗ expected ' + q.answer + ', got ' + picked}</span>${q.why}
+    <div><button class="btn" style="margin-top:8px;min-height:36px;padding:4px 12px" data-retry>Try again</button></div></div>`;
+  el.querySelector('[data-retry]').onclick = (e) => {
+    e.stopPropagation(); delete state.quiz[b.id + '-' + qi]; save(); renderRun(); bite(b.id);
+    app.querySelector(`.q[data-q="${qi}"]`).scrollIntoView({ block: 'center' });
+  };
+}
+
+let deck = { filter: 'all', order: [], pos: 0, flipped: false };
+function buildDeck() {
+  const idx = DATA.cards.map((_, i) => i).filter(i => deck.filter === 'all' || state.cards[i] !== 'got');
+  for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+  deck.order = idx; deck.pos = 0; deck.flipped = false;
+}
+function cards() {
+  setNav('cards');
+  if (!deck.order.length && deck.pos === 0) buildDeck();
+  const got = DATA.cards.filter((_, i) => state.cards[i] === 'got').length;
+  let h = `<p class="eyebrow">Recall drill · ${DATA.cards.length} cards · ${got} known</p><h1>Flashcards</h1>
+    <div class="deck-bar"><div class="seg" role="group" aria-label="Which cards">
+      <button data-f="all" aria-pressed="${deck.filter === 'all'}">All</button>
+      <button data-f="todo" aria-pressed="${deck.filter === 'todo'}">Not yet known</button></div>
+      <button class="btn" id="shuffle">Shuffle</button></div>`;
+  if (deck.pos >= deck.order.length) {
+    h += `<div class="empty">${deck.order.length ? 'End of the deck.' : 'Nothing left in this pile. Every card is marked known.'}<div class="row" style="justify-content:center;margin-top:12px"><button class="btn primary" id="again">Deal again</button></div></div>`;
+  } else {
+    const c = DATA.cards[deck.order[deck.pos]];
+    h += `<button class="card ${deck.flipped ? 'back' : ''}" id="card" aria-live="polite">
+        <span class="side">${deck.flipped ? 'Back' : 'Front'}</span>
+        <span class="face">${deck.flipped ? c.back : c.front}</span>
+        <span class="hint">${deck.flipped ? '' : 'Say the answer out loud, then tap to flip'}</span></button>
+      <div class="grade" ${deck.flipped ? '' : 'hidden'}><button class="btn" id="miss">Again</button><button class="btn done" id="hit">Got it</button></div>
+      <p class="counter">${deck.pos + 1} / ${deck.order.length}</p>`;
+  }
+  app.innerHTML = h;
+  app.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { deck.filter = b.dataset.f; buildDeck(); cards(); });
+  document.getElementById('shuffle').onclick = () => { buildDeck(); cards(); };
+  const again = document.getElementById('again'); if (again) again.onclick = () => { buildDeck(); cards(); };
+  const card = document.getElementById('card'); if (card) card.onclick = () => { deck.flipped = !deck.flipped; cards(); };
+  const mark = v => { state.cards[deck.order[deck.pos]] = v; save(); deck.pos++; deck.flipped = false; cards(); };
+  const hit = document.getElementById('hit'); if (hit) hit.onclick = () => mark('got');
+  const miss = document.getElementById('miss'); if (miss) miss.onclick = () => mark('again');
+}
+
+function notebook() {
+  setNav('notebook');
+  app.innerHTML = `<p class="eyebrow">Pen and paper · answers folded away</p><h1>Quality notebook</h1>${DATA.notebook}`;
+  window.scrollTo(0, 0);
+}
+
+function route() {
+  const h = location.hash.slice(1);
+  if (h.startsWith('bite-')) bite(h.slice(5));
+  else if (h === 'cards') cards();
+  else if (h === 'notebook') notebook();
+  else home();
+  renderRun();
+}
+window.addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>
