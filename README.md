@@ -20,6 +20,7 @@ or a network connection.
 | **A problem right now** | [`reference/pitfalls.md`](reference/pitfalls.md) and [`guardrails.md`](reference/guardrails.md) |
 | **A harness to choose** | [`reference/harness-deep-dive.md`](reference/harness-deep-dive.md) — Claude Code, Codex CLI and OpenCode, dissected against this course |
 | **Quality engineering** | [`quality/`](quality/) — 18 bite-sized follow-ons on testing and evaluating a harness, with an offline phone app and paper exercises |
+| **Copilot CLI to configure** | [`copilot/`](copilot/) — 13 bites on setting up GitHub Copilot CLI for speed (instructions, skills, agents, allow lists) and quality gates (hooks, CI), with a working kit for this repo |
 
 New here? [`lessons/00-orientation.md`](lessons/00-orientation.md).
 
@@ -73,6 +74,8 @@ reference/    glossary · pitfalls · guardrails · fork recovery · harness com
 reading/      annotated bibliography + verbatim source excerpts (offline-usable)
 teaching/     slide outline (45-min and 20-min cuts) · paper exercises · diagrams
 tools/        check-transcripts.py, which verifies quoted output against build/
+quality/      follow-on track: testing and evaluating a harness
+copilot/      follow-on track: configuring Copilot CLI, with a working kit and hook probes
 ```
 
 ## On evidence

@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "matcher": "bash|edit|create",
+        "bash": ".github/hooks/scripts/pre-tool-policy.sh",
+        "timeoutSec": 5
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "matcher": "edit|create",
+        "bash": ".github/hooks/scripts/post-edit-check.sh",
+        "timeoutSec": 30
+      }
+    ],
+    "agentStop": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/scripts/stop-gate.sh",
+        "timeoutSec": 300
+      }
+    ]
+  }
+}

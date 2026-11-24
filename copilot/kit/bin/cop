@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Launch Copilot CLI for this repo with a pre-agreed allow list, so routine steps
+# don't prompt and risky ones still do. Flags are session-only: nothing is saved.
+# Deny always beats allow, even under --allow-all.
+exec copilot \
+  --allow-tool='write' \
+  --allow-tool='shell(git status)' \
+  --allow-tool='shell(git diff)' \
+  --allow-tool='shell(git log)' \
+  --allow-tool='shell(npm run smoke)' \
+  --allow-tool='shell(npm run transcripts)' \
+  --allow-tool='shell(python3 tools/check-transcripts.py)' \
+  --deny-tool='shell(git push)' \
+  --deny-tool='shell(rm)' \
+  "$@"

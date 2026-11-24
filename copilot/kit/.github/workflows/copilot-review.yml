@@ -1,0 +1,44 @@
+# Pull-request review by Copilot CLI, against the evidence contract.
+# Needs a repo secret COPILOT_GITHUB_TOKEN: a user-owned fine-grained PAT with
+# the "Copilot Requests" account permission.
+name: copilot-review
+on:
+  pull_request:
+    paths: ["lessons/**", "build/**", "reading/**"]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  deterministic-gate:          # cheap, exact checks run first, and always
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: cd build && npm ci && npm run smoke
+      - run: python3 tools/check-transcripts.py
+
+  copilot-review:
+    needs: deterministic-gate  # don't pay for a model review of red code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm install -g @github/copilot
+      - name: Review the diff (read-only agent, no shell)
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+        run: |
+          git diff origin/${{ github.base_ref }}...HEAD > pr.diff
+          copilot -p "Review the changes in @pr.diff" \
+            --agent=evidence-reviewer \
+            --available-tools='view,grep,glob' \
+            --no-ask-user -s > review.md
+      - name: Post the review
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr comment ${{ github.event.pull_request.number }} --body-file review.md
